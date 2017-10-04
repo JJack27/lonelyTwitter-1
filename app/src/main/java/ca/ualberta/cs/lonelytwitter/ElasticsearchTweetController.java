@@ -59,7 +59,12 @@ public static class GetTweetsTask extends AsyncTask<String, Void, ArrayList<Norm
             ArrayList<NormalTweet> tweets = new ArrayList<NormalTweet>();
 
                 // TODO Build the query
-            Search search = new Search.Builder(search_parameters[0]).addIndex("texting").
+            String query = "{\n" +
+                    "    \"query\" : {\n" +
+                    "        \"term\" : { \"message\" : \"" + search_parameters[0]+"\" }\n" +
+                    "    }\n" +
+                    "}";
+            Search search = new Search.Builder(query).addIndex("testing").
                             addType("tweet").build();
             try {
                // TODO get the results of the query
