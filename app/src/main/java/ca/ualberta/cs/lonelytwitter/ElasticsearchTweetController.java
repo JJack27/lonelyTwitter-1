@@ -22,14 +22,14 @@ import io.searchbox.core.SearchResult;
 public class ElasticsearchTweetController {
     private static JestDroidClient client;
 
-    public static class GetTweetsTask extends AsyncTask<String,Void,ArrayList<NormalTweet>> {
+    public static class GetTweetsTask extends AsyncTask<String,Void,ArrayList<NormalAbstractTweet>> {
 
         @Override
-        protected ArrayList<NormalTweet> doInBackground(String... params) {
+        protected ArrayList<NormalAbstractTweet> doInBackground(String... params) {
             verifyConfig();
 
             // Hold (eventually) the tweets that we get back from Elasticsearch
-            ArrayList<NormalTweet> tweets = new ArrayList<NormalTweet>();
+            ArrayList<NormalAbstractTweet> tweets = new ArrayList<NormalAbstractTweet>();
 
             // NOTE: A HUGE ASSUMPTION IS ABOUT TO BE MADE!
             // Assume that only one string is passed in.
@@ -56,7 +56,7 @@ public class ElasticsearchTweetController {
             try {
                 SearchResult execute = client.execute(search);
                 if(execute.isSucceeded()) {
-                    List<NormalTweet> foundTweets = execute.getSourceAsObjectList(NormalTweet.class);
+                    List<NormalAbstractTweet> foundTweets = execute.getSourceAsObjectList(NormalAbstractTweet.class);
                     tweets.addAll(foundTweets);
                 } else {
                     Log.i("TODO", "Search was unsuccessful, do something!");
@@ -69,13 +69,13 @@ public class ElasticsearchTweetController {
         }
     }
 
-    public static class AddTweetTask extends AsyncTask<NormalTweet,Void,Void> {
+    public static class AddTweetTask extends AsyncTask<NormalAbstractTweet,Void,Void> {
 
         @Override
-        protected Void doInBackground(NormalTweet... params) {
+        protected Void doInBackground(NormalAbstractTweet... params) {
             verifyConfig();
 
-            for(NormalTweet tweet : params) {
+            for(NormalAbstractTweet tweet : params) {
                 Index index = new Index.Builder(tweet).index("testing").type("tweet").build();
 
                 try {

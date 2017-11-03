@@ -5,12 +5,12 @@ import java.util.Date;
 /**
  * Created by romansky on 1/12/16.
  */
-public class ImportantTweet extends Tweet implements Tweetable {
-    public ImportantTweet(Date date, String message) {
+public class ImportantAbstractTweet extends AbstractTweet implements Tweetable {
+    public ImportantAbstractTweet(Date date, String message) {
         super(date, message);
     }
 
-    public ImportantTweet(String message) {
+    public ImportantAbstractTweet(String message) {
         super(message);
     }
 

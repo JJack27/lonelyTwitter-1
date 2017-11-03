@@ -4,17 +4,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import com.google.gson.Gson;
-
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
 
 import io.searchbox.annotations.JestId;
 
-public abstract class Tweet {
+// rename to AbstractTweet, so that it's easy to know it's an abstract class.
+public abstract class AbstractTweet {
     @JestId
     protected String id;
-
+    protected int limit = 140;
     public String getId() {
         return id;
     }
@@ -29,18 +28,18 @@ public abstract class Tweet {
     protected transient Bitmap thumbnail;
     protected String thumbnailBase64;
 
-    public Tweet(Date date, String message, Bitmap thumbnail) {
+    public AbstractTweet(Date date, String message, Bitmap thumbnail) {
         this.date = date;
         this.message = message;
         this.thumbnail = thumbnail;
     }
 
-    public Tweet(Date date, String message) {
+    public AbstractTweet(Date date, String message) {
         this.date = date;
         this.message = message;
     }
 
-    public Tweet(String message) {
+    public AbstractTweet(String message) {
         this.message = message;
         this.date = new Date();
     }
@@ -94,7 +93,8 @@ public abstract class Tweet {
     }
 
     public void setMessage(String message) throws TweetTooLongException {
-        if (message.length() > 140) {
+        // changed 140 to this.limit. Added one more private variable to store the upper limit for a tweet.
+        if (message.length() > this.limit) {
             throw new TweetTooLongException();
         }
         this.message = message;

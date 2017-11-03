@@ -15,15 +15,15 @@ import java.util.ArrayList;
  * NEW!
  * Using the example from https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
  */
-public class TweetAdapter extends ArrayAdapter<Tweet> {
-    public TweetAdapter(Context context, ArrayList<Tweet> users) {
+public class TweetAdapter extends ArrayAdapter<AbstractTweet> {
+    public TweetAdapter(Context context, ArrayList<AbstractTweet> users) {
         super(context, 0, users);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
-        Tweet tweet = getItem(position);
+        AbstractTweet tweet = getItem(position);
         String message = tweet.getMessage();
         String dateString = tweet.getDate().toString();
 

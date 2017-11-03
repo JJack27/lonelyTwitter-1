@@ -20,13 +20,11 @@ public class LonelyTwitterActivity extends Activity {
     private EditText bodyText;
     private ListView oldTweetsList;
 
+    // this is changed to be local variable
     private TweetList myTweets;
-    private ArrayList<Tweet> tweets;
-    private ArrayAdapter<Tweet> adapter;
+    private ArrayAdapter<AbstractTweet> adapter;
 
-    private Button saveButton;
-
-    public ArrayAdapter<Tweet> getAdapter() {
+    public ArrayAdapter<AbstractTweet> getAdapter() {
         return adapter;
     }
 
@@ -34,9 +32,10 @@ public class LonelyTwitterActivity extends Activity {
     private ImageButton pictureButton;
     private Bitmap thumbnail;
 
-    int numImportant;
+    // make this private
+    private int numImportant;
 
-    static final int REQUEST_CAPTURING_IMAGE = 1234;
+    private static final int REQUEST_CAPTURING_IMAGE = 1234;
     /**
      * Called when the activity is first created.
      */
@@ -59,12 +58,12 @@ public class LonelyTwitterActivity extends Activity {
             }
         });
 
-        saveButton = (Button) findViewById(R.id.saveButton);
+        Button saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View v) {
                 String text = bodyText.getText().toString();
-                NormalTweet latestTweet = new NormalTweet(text);
+                NormalAbstractTweet latestTweet = new NormalAbstractTweet(text);
 
                 myTweets.add(latestTweet);
 
@@ -94,10 +93,9 @@ public class LonelyTwitterActivity extends Activity {
 
         // Get the latest tweets from Elasticsearch
         ElasticsearchTweetController.GetTweetsTask getTweetsTask = new ElasticsearchTweetController.GetTweetsTask();
-//        getTweetsTask.execute("test");
         getTweetsTask.execute("");
         try {
-            tweets = new ArrayList<Tweet>();
+            ArrayList<AbstractTweet> tweets = new ArrayList<AbstractTweet>();
             tweets.addAll(getTweetsTask.get());
             myTweets = new TweetList(tweets);
         } catch (InterruptedException e) {
@@ -108,13 +106,14 @@ public class LonelyTwitterActivity extends Activity {
 
         //Count important tweets
         numImportant = 0;
-        for ( Tweet aTweet: myTweets.getTweets() ){
-            if (aTweet.isImportant() == Boolean.TRUE){
+        for ( AbstractTweet aTweet: myTweets.getTweets() ){
+            // it was ==, but now, I changed to .equals()
+            if (aTweet.isImportant().equals(Boolean.TRUE)){
                 numImportant++;
             }
         }
 
-//        adapter = new ArrayAdapter<Tweet>(this, R.layout.list_item, tweets);
+//        adapter = new ArrayAdapter<AbstractTweet>(this, R.layout.list_item, tweets);
         // Binds tweet list with view, so when our array updates, the view updates with it
         //adapter = new TweetAdapter(this, tweets); /* NEW! */
         adapter = new TweetAdapter(this, myTweets.getTweets());

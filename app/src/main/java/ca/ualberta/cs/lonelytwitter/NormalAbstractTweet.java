@@ -2,12 +2,12 @@ package ca.ualberta.cs.lonelytwitter;
 
 import java.util.Date;
 
-public class NormalTweet extends Tweet implements Tweetable {
-    public NormalTweet(Date date, String message) {
+public class NormalAbstractTweet extends AbstractTweet implements Tweetable {
+    public NormalAbstractTweet(Date date, String message) {
         super(date, message);
     }
 
-    public NormalTweet(String message) {
+    public NormalAbstractTweet(String message) {
         super(message);
     }
 
